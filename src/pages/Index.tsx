@@ -8,8 +8,24 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Icon from "@/components/ui/icon";
+import AdminPanel from "@/components/AdminPanel";
+import { useState } from "react";
 
 const Index = () => {
+  const [isAdminMode, setIsAdminMode] = useState(false);
+  const [contentData, setContentData] = useState({
+    "hero-title": "ЗАГРУЖАЙ СВОЙ КОНТЕНТ",
+    "hero-description":
+      "Создавай игры, видео и комиксы. Делись с сообществом. Получай рейтинги!",
+    "featured-title": "ПОПУЛЯРНЫЙ КОНТЕНТ",
+  });
+
+  const handleUpdateContent = (contentId: string, newValue: string) => {
+    setContentData((prev) => ({
+      ...prev,
+      [contentId]: newValue,
+    }));
+  };
   const featuredContent = [
     {
       id: 1,
@@ -100,36 +116,45 @@ const Index = () => {
               2000s EDITION
             </Badge>
           </div>
-          <nav className="flex space-x-6">
+          <div className="flex items-center space-x-4">
+            <nav className="flex space-x-6">
+              <Button
+                variant="ghost"
+                className="text-newgrounds-black hover:bg-newgrounds-black hover:text-newgrounds-orange font-bold"
+              >
+                <Icon name="Home" size={20} className="mr-2" />
+                ГЛАВНАЯ
+              </Button>
+              <Button
+                variant="ghost"
+                className="text-newgrounds-black hover:bg-newgrounds-black hover:text-newgrounds-orange font-bold"
+              >
+                <Icon name="Gamepad2" size={20} className="mr-2" />
+                ИГРЫ
+              </Button>
+              <Button
+                variant="ghost"
+                className="text-newgrounds-black hover:bg-newgrounds-black hover:text-newgrounds-orange font-bold"
+              >
+                <Icon name="Play" size={20} className="mr-2" />
+                ВИДЕО
+              </Button>
+              <Button
+                variant="ghost"
+                className="text-newgrounds-black hover:bg-newgrounds-black hover:text-newgrounds-orange font-bold"
+              >
+                <Icon name="BookOpen" size={20} className="mr-2" />
+                КОМИКСЫ
+              </Button>
+            </nav>
             <Button
-              variant="ghost"
-              className="text-newgrounds-black hover:bg-newgrounds-black hover:text-newgrounds-orange font-bold"
+              onClick={() => setIsAdminMode(true)}
+              className="bg-newgrounds-black text-newgrounds-orange hover:bg-gray-800 font-bold"
             >
-              <Icon name="Home" size={20} className="mr-2" />
-              ГЛАВНАЯ
+              <Icon name="Settings" size={20} className="mr-2" />
+              РЕДАКТОР
             </Button>
-            <Button
-              variant="ghost"
-              className="text-newgrounds-black hover:bg-newgrounds-black hover:text-newgrounds-orange font-bold"
-            >
-              <Icon name="Gamepad2" size={20} className="mr-2" />
-              ИГРЫ
-            </Button>
-            <Button
-              variant="ghost"
-              className="text-newgrounds-black hover:bg-newgrounds-black hover:text-newgrounds-orange font-bold"
-            >
-              <Icon name="Play" size={20} className="mr-2" />
-              ВИДЕО
-            </Button>
-            <Button
-              variant="ghost"
-              className="text-newgrounds-black hover:bg-newgrounds-black hover:text-newgrounds-orange font-bold"
-            >
-              <Icon name="BookOpen" size={20} className="mr-2" />
-              КОМИКСЫ
-            </Button>
-          </nav>
+          </div>
         </div>
       </header>
 
@@ -140,11 +165,10 @@ const Index = () => {
             className="text-5xl font-bold text-newgrounds-black mb-4"
             style={{ fontFamily: "Arial, sans-serif" }}
           >
-            ЗАГРУЖАЙ СВОЙ КОНТЕНТ
+            {contentData["hero-title"]}
           </h2>
           <p className="text-xl text-newgrounds-black mb-8 max-w-2xl mx-auto">
-            Создавай игры, видео и комиксы. Делись с сообществом. Получай
-            рейтинги!
+            {contentData["hero-description"]}
           </p>
           <div className="flex justify-center space-x-4">
             <Button className="bg-newgrounds-black text-newgrounds-orange hover:bg-gray-800 px-8 py-3 text-lg font-bold">
@@ -170,7 +194,7 @@ const Index = () => {
             className="text-3xl font-bold text-newgrounds-orange mb-12 text-center"
             style={{ fontFamily: "Arial, sans-serif" }}
           >
-            ПОПУЛЯРНЫЙ КОНТЕНТ
+            {contentData["featured-title"]}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredContent.map((item) => (
@@ -254,6 +278,12 @@ const Index = () => {
           </Button>
         </div>
       </footer>
+
+      <AdminPanel
+        isOpen={isAdminMode}
+        onClose={() => setIsAdminMode(false)}
+        onUpdateContent={handleUpdateContent}
+      />
     </div>
   );
 };
